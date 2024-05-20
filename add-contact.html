@@ -1,0 +1,87 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Chat Book</title>
+        <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+        
+        <style>
+        body {
+            background-image: url('img/sea.jpg');
+            background-size: cover;
+            background-position: center;
+            /* Other CSS properties */
+        }
+            
+            /* Add overlay styling */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Adjust opacity here */
+            z-index: -1; /* Ensure the overlay is behind other content */
+        }
+    </style>
+    </head>
+
+    <body>
+
+        <form id="editForm">
+            <label for="firstname">Firstname</label>
+            <input type="text" name="firstname" id="firstname"><br/>
+            <label for="lastname">Last name</label>
+            <input type="text" name="lastname" id="lastname"><br/>
+            <label for="mobile">Mobile</label>
+            <input type="text" name="mobile" id="mobile"><br/>
+            <label for="email">Email</label>
+            <input type="text" name="email" id="email"><br/>
+            <label for="avatar">Select a file</label>
+            <input type="file" name="avatar" id="avatar"><br/>
+            <button type="submit" id="submitForm">Submit</button>
+        </form>
+        <br/>
+        <button id="homeLink" type="button">Home</button>
+
+        <script src="config.js"></script>
+        <script>
+            document.getElementById("submitForm").addEventListener('click', submitForm);
+            document.getElementById("homeLink").addEventListener('click', homeLink);
+
+            function submitForm(e){
+                e.preventDefault();
+
+                const form = new FormData(document.querySelector('#editForm'));
+                form.append('apiKey', apiKey);
+
+                fetch(rootPath + 'controller/insert-contact/', {
+                    method: 'POST',
+                    headers: {'Accept': 'application/json, *.*'},
+                    body: form
+                })
+                .then(function(response){
+                    return response.text();
+                })
+                .then(function(data){
+                    if(data == "1"){
+                        alert("Contact added.")
+                        //link to home page
+                        homeLink();
+                    }else{
+                        alert(data);
+                        //link to home page
+                        homeLink();
+                    }
+                })
+            }
+
+            function homeLink(){
+                window.open("index.html", "_self");
+            }
+
+        </script>
+
+    </body>
+</html>
